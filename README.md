@@ -1,2 +1,2 @@
 # Mar.Console
-Do NOT need copy some useful file of console tool to every project.
+There is no need to copy some useful console tool files into every project.
