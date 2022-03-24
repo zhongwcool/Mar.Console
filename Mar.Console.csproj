@@ -1,20 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Console in March</Title>
         <Description>There is no need to copy some useful console tool files into every project.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console.git</RepositoryUrl>
-        <PackageReleaseNotes>1. Print message with color</PackageReleaseNotes>
-        <PackageVersion>0.1.0</PackageVersion>
+        <PackageReleaseNotes>1. Back compatible with .net4.6.1+</PackageReleaseNotes>
+        <PackageVersion>0.2.0</PackageVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <LangVersion>10</LangVersion>
+        <TargetFrameworks>net461;net472;net48;net5.0;net6.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="LICENSE" Pack="true" PackagePath=""/>
+        <None Include="LICENSE" Pack="true" PackagePath="" />
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'net461'" />
     </ItemGroup>
 
 </Project>
