@@ -7,8 +7,8 @@
         <Title>Console in March</Title>
         <Description>There is no need to copy some useful console tool files into every project.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console.git</RepositoryUrl>
-        <PackageReleaseNotes>1. Back compatible with .net4.6.1+</PackageReleaseNotes>
-        <PackageVersion>0.2.0</PackageVersion>
+        <PackageReleaseNotes>1. Build it in RELEASE.</PackageReleaseNotes>
+        <PackageVersion>0.2.1</PackageVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>10</LangVersion>
