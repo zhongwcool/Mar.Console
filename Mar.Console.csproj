@@ -5,14 +5,14 @@
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Console in March</Title>
-        <Description>There is no need to copy some useful console tool files into every project.</Description>
+        <Description>Some useful tool class.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console.git</RepositoryUrl>
-        <PackageReleaseNotes>1. Back compatible with .net4.6.1+</PackageReleaseNotes>
-        <PackageVersion>0.2.0</PackageVersion>
+        <PackageReleaseNotes>1. Add JsonUtil</PackageReleaseNotes>
+        <PackageVersion>0.3.0</PackageVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <LangVersion>10</LangVersion>
-        <TargetFrameworks>net461;net472;net48;net5.0;net6.0</TargetFrameworks>
+        <LangVersion>11</LangVersion>
+        <TargetFrameworks>net6.0;net7.0;net472;net48</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
