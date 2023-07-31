@@ -4,6 +4,10 @@
 
 Now we have ConsoleUtil and JsonUtil in this tool.
 
+## EmailUtil
+
+Send mail directly with smtp.
+
 ## ConsoleUtil
 
 Print console message in different color.
