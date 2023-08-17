@@ -1,5 +1,7 @@
 # Mar.Console
 
+[![latest version](https://img.shields.io/nuget/v/Mar.Console)](https://www.nuget.org/packages/Mar.Console) [![downloads](https://img.shields.io/nuget/dt/Mar.Console)](https://www.nuget.org/packages/Mar.Console)
+
 ## About
 
 Now we have ConsoleUtil and JsonUtil in this tool.
@@ -32,7 +34,32 @@ Convert object to json string.
 
 #### Load
 
-You can use this tool like `JsonUtil.Load<MyModel>(file);`
+Load mail list from json file.
+
+```c#
+    private void Prepare()
+    {
+        var task = Task.Run(() =>
+        {
+            var model = JsonUtil.Load<MailMode>(JSON_FILE);
+            return model?.Mails;
+        });
+
+        task.ContinueWith(_ =>
+        {
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                if (task.Result == null) return;
+                foreach (var mail in task.Result)
+                {
+                    EmailList.Add(mail);
+                }
+            });
+        });
+    }
+    
+    private const string JSON_FILE = "mails.json";
+```
 
 #### Save
 
