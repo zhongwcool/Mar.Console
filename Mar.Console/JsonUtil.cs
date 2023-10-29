@@ -5,7 +5,7 @@ namespace Mar.Console;
 public static class JsonUtil
 {
     /// <summary>
-    /// save data to json file
+    ///     save data to json file
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="json">json data</param>
@@ -36,7 +36,7 @@ public static class JsonUtil
     }
 
     /// <summary>
-    /// Load data from json
+    ///     Load data from json
     /// </summary>
     public static T? Load<T>(string filename)
     {
