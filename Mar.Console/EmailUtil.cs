@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
-namespace Mar.Console;
+namespace Mar.Cheese;
 
 public class EmailUtil
 {

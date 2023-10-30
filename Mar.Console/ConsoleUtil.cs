@@ -1,6 +1,6 @@
 ﻿using static System.ConsoleColor;
 
-namespace Mar.Console;
+namespace Mar.Cheese;
 
 public static class ConsoleUtil
 {
@@ -28,8 +28,8 @@ public static class ConsoleUtil
 
     private static void PrintColor(this string s, ConsoleColor color)
     {
-        System.Console.ForegroundColor = color;
-        System.Console.WriteLine(s);
-        System.Console.ResetColor();
+        Console.ForegroundColor = color;
+        Console.WriteLine(s);
+        Console.ResetColor();
     }
 }

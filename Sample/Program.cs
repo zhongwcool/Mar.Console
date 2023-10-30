@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Mar.Console;
+using Mar.Cheese;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

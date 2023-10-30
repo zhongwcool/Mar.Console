@@ -1,7 +1,7 @@
 ﻿using System.Management;
 using Serilog;
 
-namespace Mar.Console;
+namespace Mar.Cheese;
 
 public class SystemUtil
 {
@@ -18,26 +18,26 @@ public class SystemUtil
                     if (useSerilog)
                         Log.Fatal("Windows Version: Windows 10 {OsVersion}", version.Build);
                     else
-                        System.Console.WriteLine($"Windows Version: Windows 10 {version.Build}");
+                        Console.WriteLine($"Windows Version: Windows 10 {version.Build}");
                     break;
                 case 10 when version.Build >= 22000:
                     if (useSerilog)
                         Log.Fatal("Windows Version: Windows 11 {OsVersion}", version.Build);
                     else
-                        System.Console.WriteLine($"Windows Version: Windows 11 {version.Build}");
+                        Console.WriteLine($"Windows Version: Windows 11 {version.Build}");
                     break;
                 default:
                     if (useSerilog)
                         Log.Fatal("Windows Version: {OsVersion}", Environment.OSVersion);
                     else
-                        System.Console.WriteLine($"Windows Version: {Environment.OSVersion}");
+                        Console.WriteLine($"Windows Version: {Environment.OSVersion}");
                     break;
             }
 
             if (useSerilog)
                 Log.Fatal(".NET SDK Version: {Version}", Environment.Version);
             else
-                System.Console.WriteLine($".NET SDK Version: {Environment.Version}");
+                Console.WriteLine($".NET SDK Version: {Environment.Version}");
 
             // Query CPU
             var searcher = new ManagementObjectSearcher("select * from Win32_Processor");
@@ -47,7 +47,7 @@ public class SystemUtil
                 if (useSerilog)
                     Log.Fatal("CPU: {Unknown}", share["Name"]);
                 else
-                    System.Console.WriteLine($"CPU: {share["Name"]}");
+                    Console.WriteLine($"CPU: {share["Name"]}");
             }
 
             // Query Graphics Card
@@ -58,7 +58,7 @@ public class SystemUtil
                 if (useSerilog)
                     Log.Fatal("Graphics Card: {Unknown}", share["Name"]);
                 else
-                    System.Console.WriteLine("Graphics Card: " + share["Name"]);
+                    Console.WriteLine("Graphics Card: " + share["Name"]);
             }
 
             // Query Memory
@@ -71,7 +71,7 @@ public class SystemUtil
                 if (useSerilog)
                     Log.Fatal("Memory: {Unknown} GB", mem);
                 else
-                    System.Console.WriteLine("Memory: " + mem + "GB");
+                    Console.WriteLine("Memory: " + mem + "GB");
             }
         });
     }

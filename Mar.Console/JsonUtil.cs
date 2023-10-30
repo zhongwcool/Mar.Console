@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mar.Console;
+namespace Mar.Cheese;
 
 public static class JsonUtil
 {
