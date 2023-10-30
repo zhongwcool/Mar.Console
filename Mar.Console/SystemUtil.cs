@@ -5,8 +5,13 @@ namespace Mar.Cheese;
 
 public class SystemUtil
 {
-    // 打印运行环境
-    public static async void PrintSystemInfo(bool useSerilog = false)
+    /// <summary>
+    ///     打印运行环境
+    ///     Print system info
+    /// </summary>
+    /// <param name="options">Output options: UseConsole use console, UseSerilog use Serilog</param>
+    /// <returns></returns>
+    public static async void PrintSystemInfo(OutOptions options = OutOptions.UseConsole)
     {
         await Task.Run(() =>
         {
@@ -15,26 +20,26 @@ public class SystemUtil
             switch (version.Major)
             {
                 case 10 when version.Build >= 19041:
-                    if (useSerilog)
+                    if (options == OutOptions.UseSerilog)
                         Log.Fatal("Windows Version: Windows 10 {OsVersion}", version.Build);
                     else
                         Console.WriteLine($"Windows Version: Windows 10 {version.Build}");
                     break;
                 case 10 when version.Build >= 22000:
-                    if (useSerilog)
+                    if (options == OutOptions.UseSerilog)
                         Log.Fatal("Windows Version: Windows 11 {OsVersion}", version.Build);
                     else
                         Console.WriteLine($"Windows Version: Windows 11 {version.Build}");
                     break;
                 default:
-                    if (useSerilog)
+                    if (options == OutOptions.UseSerilog)
                         Log.Fatal("Windows Version: {OsVersion}", Environment.OSVersion);
                     else
                         Console.WriteLine($"Windows Version: {Environment.OSVersion}");
                     break;
             }
 
-            if (useSerilog)
+            if (options == OutOptions.UseSerilog)
                 Log.Fatal(".NET SDK Version: {Version}", Environment.Version);
             else
                 Console.WriteLine($".NET SDK Version: {Environment.Version}");
@@ -44,7 +49,7 @@ public class SystemUtil
             foreach (var o in searcher.Get())
             {
                 var share = (ManagementObject)o;
-                if (useSerilog)
+                if (options == OutOptions.UseSerilog)
                     Log.Fatal("CPU: {Unknown}", share["Name"]);
                 else
                     Console.WriteLine($"CPU: {share["Name"]}");
@@ -55,7 +60,7 @@ public class SystemUtil
             foreach (var o in searcher.Get())
             {
                 var share = (ManagementObject)o;
-                if (useSerilog)
+                if (options == OutOptions.UseSerilog)
                     Log.Fatal("Graphics Card: {Unknown}", share["Name"]);
                 else
                     Console.WriteLine("Graphics Card: " + share["Name"]);
@@ -68,11 +73,17 @@ public class SystemUtil
                 var share = (ManagementObject)o;
                 var capacityBytes = (ulong)share["Capacity"];
                 var mem = (double)capacityBytes / 1024 / 1024 / 1024;
-                if (useSerilog)
+                if (options == OutOptions.UseSerilog)
                     Log.Fatal("Memory: {Unknown} GB", mem);
                 else
                     Console.WriteLine("Memory: " + mem + "GB");
             }
         });
     }
+}
+
+public enum OutOptions
+{
+    UseConsole = 0,
+    UseSerilog
 }

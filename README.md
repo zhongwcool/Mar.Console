@@ -4,6 +4,10 @@
 
 Modify namespace form Mar.Console to Mar.Cheese to avoid conflicts.
 
+## ExceptionUtil
+
+Get text message from exception.
+
 ## SystemUtil
 
 Print System info.
@@ -23,12 +27,9 @@ You can use this tool like `"".PrintGreen();`
 ```c#
 $"任务执行结果：{result}".PrintGreen();
 ```
-
 ### Demo
 
 ![](https://i.imgur.com/gOyzemr.png)
-
-
 
 ## JsonUtil
 

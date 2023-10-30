@@ -2,9 +2,15 @@
 
 [![latest version](https://img.shields.io/nuget/v/Mar.Console)](https://www.nuget.org/packages/Mar.Console) [![downloads](https://img.shields.io/nuget/dt/Mar.Console)](https://www.nuget.org/packages/Mar.Console)
 
-## About
+Modify namespace form Mar.Console to Mar.Cheese to avoid conflicts.
 
-Now we have ConsoleUtil and JsonUtil in this tool.
+## ExceptionUtil
+
+Get text message from exception.
+
+## SystemUtil
+
+Print System info.
 
 ## EmailUtil
 

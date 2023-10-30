@@ -10,6 +10,6 @@ Log.Logger = new LoggerConfiguration()
 
 Console.WriteLine($"Hello, {Environment.UserName}!");
 
-SystemUtil.PrintSystemInfo(true);
+SystemUtil.PrintSystemInfo(OutOptions.UseSerilog);
 
 Console.Read();

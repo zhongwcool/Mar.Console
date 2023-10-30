@@ -7,13 +7,14 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console.git</RepositoryUrl>
-        <PackageReleaseNotes>1. Modify namespace to avoid conflicts</PackageReleaseNotes>
-        <PackageVersion>0.5.1</PackageVersion>
+        <PackageReleaseNotes>1. Add ExceptionUtil</PackageReleaseNotes>
+        <PackageVersion>0.6.0</PackageVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>11</LangVersion>
         <TargetFrameworks>net6.0;net7.0;net472;net48</TargetFrameworks>
         <RootNamespace>Mar.Cheese</RootNamespace>
+        <Authors>Zhong Wei</Authors>
     </PropertyGroup>
 
     <ItemGroup>
