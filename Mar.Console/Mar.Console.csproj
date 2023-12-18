@@ -7,8 +7,8 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console.git</RepositoryUrl>
-        <PackageReleaseNotes>1. Add GetSystemInfo</PackageReleaseNotes>
-        <PackageVersion>0.6.2</PackageVersion>
+        <PackageReleaseNotes>1. Fix crash when attachments is null</PackageReleaseNotes>
+        <PackageVersion>0.6.3</PackageVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>11</LangVersion>
