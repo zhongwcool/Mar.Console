@@ -30,7 +30,7 @@ $"任务执行结果：{result}".PrintGreen();
 
 ### Demo
 
-![](https://i.imgur.com/gOyzemr.png)
+![How to use ConsoleUtil](https://https://raw.githubusercontent.com/zhongwcool/Mar.Console/main/Assets/145158.png)
 
 ## JsonUtil
 

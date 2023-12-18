@@ -1,4 +1,5 @@
 ﻿using System.Management;
+using System.Text;
 using Serilog;
 
 namespace Mar.Cheese;
@@ -79,6 +80,61 @@ public class SystemUtil
                     Console.WriteLine("Memory: " + mem + "GB");
             }
         });
+    }
+
+    public static async Task<string> GetSystemInfo()
+    {
+        var stringBuilder = new StringBuilder();
+
+        await Task.Run(() =>
+        {
+            var os = Environment.OSVersion;
+            var version = os.Version;
+
+            stringBuilder.Append("-------------------------------------------").Append(Environment.NewLine);
+            switch (version.Major)
+            {
+                case 10 when version.Build >= 19041:
+                    stringBuilder.Append($"Windows Version: Windows 10 {version.Build}").Append(Environment.NewLine);
+                    break;
+                case 10 when version.Build >= 22000:
+                    stringBuilder.Append($"Windows Version: Windows 11 {version.Build}").Append(Environment.NewLine);
+                    break;
+                default:
+                    stringBuilder.Append($"Windows Version: {Environment.OSVersion}").Append(Environment.NewLine);
+                    break;
+            }
+
+            stringBuilder.Append($".NET SDK Version: {Environment.Version}").Append(Environment.NewLine);
+
+            // Query CPU
+            var searcher = new ManagementObjectSearcher("select * from Win32_Processor");
+            foreach (var o in searcher.Get())
+            {
+                var share = (ManagementObject)o;
+                stringBuilder.Append($"CPU: {share["Name"]}").Append(Environment.NewLine);
+            }
+
+            // Query Graphics Card
+            searcher = new ManagementObjectSearcher("select * from Win32_VideoController");
+            foreach (var o in searcher.Get())
+            {
+                var share = (ManagementObject)o;
+                stringBuilder.Append("Graphics Card: " + share["Name"]).Append(Environment.NewLine);
+            }
+
+            // Query Memory
+            searcher = new ManagementObjectSearcher("select * from Win32_PhysicalMemory");
+            foreach (var o in searcher.Get())
+            {
+                var share = (ManagementObject)o;
+                var capacityBytes = (ulong)share["Capacity"];
+                var mem = (double)capacityBytes / 1024 / 1024 / 1024;
+                stringBuilder.Append("Memory: " + mem + "GB").Append(Environment.NewLine);
+            }
+        });
+
+        return stringBuilder.ToString();
     }
 }
 
