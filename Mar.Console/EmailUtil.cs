@@ -27,17 +27,18 @@ public class EmailUtil
             mail.CC.Add(from);
 
             // 添加附件
-            foreach (var file in attachments!)
-            {
-                if (File.Exists(file) == false)
+            if (attachments != null)
+                foreach (var file in attachments)
                 {
-                    $"附件不存在：{file}".PrintYellow();
-                    continue;
-                }
+                    if (File.Exists(file) == false)
+                    {
+                        $"附件不存在：{file}".PrintYellow();
+                        continue;
+                    }
 
-                var attachment = new Attachment(file);
-                mail.Attachments.Add(attachment);
-            }
+                    var attachment = new Attachment(file);
+                    mail.Attachments.Add(attachment);
+                }
 
             // 创建 SMTP 客户端
             var smtpClient = new SmtpClient(smtpServer, smtpPort);
