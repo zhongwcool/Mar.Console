@@ -50,11 +50,10 @@ public class EmailUtil
             {
                 // 发送邮件
                 smtpClient.Send(mail);
-                "邮件发送成功！".PrintGreen();
             }
             catch (Exception ex)
             {
-                $"邮件发送失败：{ex.Message}".PrintErr();
+                $"{ex.Message}".PrintErr();
                 return false;
             }
             finally

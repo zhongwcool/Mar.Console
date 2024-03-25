@@ -9,12 +9,12 @@ public static class JsonUtil
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="json">json data</param>
-    public static void Save(string filename, string json)
+    public static async void Save(string filename, string json)
     {
         using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
         using var sw = new StreamWriter(fs);
-        sw.WriteLine(json);
-        sw.Flush();
+        await sw.WriteLineAsync(json);
+        await sw.FlushAsync();
         sw.Close();
         fs.Close();
     }
@@ -24,13 +24,13 @@ public static class JsonUtil
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="model">json in model</param>
-    public static void Save<T>(string filename, T model)
+    public static async Task Save<T>(string filename, T model)
     {
         var json = JsonConvert.SerializeObject(model);
         using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
         using var sw = new StreamWriter(fs);
-        sw.WriteLine(json);
-        sw.Flush();
+        await sw.WriteLineAsync(json);
+        await sw.FlushAsync();
         sw.Close();
         fs.Close();
     }
@@ -38,11 +38,11 @@ public static class JsonUtil
     /// <summary>
     ///     Load data from json
     /// </summary>
-    public static T? Load<T>(string filename)
+    public static async Task<T?> Load<T>(string filename)
     {
         using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         using var sr = new StreamReader(fs);
-        var json = sr.ReadToEnd();
+        var json = await sr.ReadToEndAsync();
         sr.Close();
         fs.Close();
 

@@ -27,6 +27,7 @@ You can use this tool like `"".PrintGreen();`
 ```c#
 $"任务执行结果：{result}".PrintGreen();
 ```
+
 ### Demo
 
 ![How to use ConsoleUtil](https://https://raw.githubusercontent.com/zhongwcool/Mar.Console/main/Assets/145158.png)

@@ -6,24 +6,20 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
-        <RepositoryUrl>https://github.com/zhongwcool/Mar.Console.git</RepositoryUrl>
-        <PackageReleaseNotes>1. Fix crash when attachments is null</PackageReleaseNotes>
-        <PackageVersion>0.6.3</PackageVersion>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
+        <PackageReleaseNotes>1. 修改JsonUtil的方法为async类型</PackageReleaseNotes>
+        <PackageVersion>0.6.4</PackageVersion>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <LangVersion>11</LangVersion>
-        <TargetFrameworks>net6.0;net7.0;net472;net48;net8.0</TargetFrameworks>
+        <LangVersion>12</LangVersion>
         <RootNamespace>Mar.Cheese</RootNamespace>
         <Authors>Alex Zhong</Authors>
         <Company>Alex Zhong</Company>
-        <AssemblyVersion>0.6.1</AssemblyVersion>
-        <FileVersion>0.6.1</FileVersion>
+        <AssemblyVersion>0.6.4</AssemblyVersion>
+        <FileVersion>0.6.4</FileVersion>
+        <PackageIcon>ico_nuget.png</PackageIcon>
+        <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="LICENSE" Pack="true" PackagePath=""/>
-        <None Include="README.md" Pack="true" PackagePath=""/>
-    </ItemGroup>
 
     <ItemGroup>
         <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'net461'"/>
@@ -33,6 +29,15 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
         <PackageReference Include="Serilog" Version="3.1.1"/>
         <PackageReference Include="System.Management" Version="8.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="">
+            <Link>Properties\README.md</Link>
+        </None>
+        <None Include="..\ico_nuget.png" Pack="true" PackagePath="">
+            <Link>Properties\ico_nuget.png</Link>
+        </None>
     </ItemGroup>
 
 </Project>
