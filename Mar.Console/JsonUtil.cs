@@ -9,7 +9,22 @@ public static class JsonUtil
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="json">json data</param>
-    public static async void Save(string filename, string json)
+    public static void Save(string filename, string json)
+    {
+        using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+        using var sw = new StreamWriter(fs);
+        sw.WriteLine(json);
+        sw.Flush();
+        sw.Close();
+        fs.Close();
+    }
+
+    /// <summary>
+    ///     save data to json file
+    /// </summary>
+    /// <param name="filename">target file</param>
+    /// <param name="json">json data</param>
+    public static async void SaveAsync(string filename, string json)
     {
         using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
         using var sw = new StreamWriter(fs);
@@ -24,7 +39,23 @@ public static class JsonUtil
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="model">json in model</param>
-    public static async Task Save<T>(string filename, T model)
+    public static void Save<T>(string filename, T model)
+    {
+        var json = JsonConvert.SerializeObject(model);
+        using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+        using var sw = new StreamWriter(fs);
+        sw.WriteLine(json);
+        sw.Flush();
+        sw.Close();
+        fs.Close();
+    }
+
+    /// <summary>
+    ///     save data to json file
+    /// </summary>
+    /// <param name="filename">target file</param>
+    /// <param name="model">json in model</param>
+    public static async Task SaveAsync<T>(string filename, T model)
     {
         var json = JsonConvert.SerializeObject(model);
         using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
@@ -38,9 +69,25 @@ public static class JsonUtil
     /// <summary>
     ///     Load data from json
     /// </summary>
-    public static async Task<T?> Load<T>(string filename)
+    public static T? Load<T>(string filename)
     {
         using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var sr = new StreamReader(fs);
+        var json = sr.ReadToEnd();
+        sr.Close();
+        fs.Close();
+
+        if (string.IsNullOrEmpty(json)) return default;
+        var model = JsonConvert.DeserializeObject<T>(json);
+        return model;
+    }
+
+    /// <summary>
+    ///     Load data from json
+    /// </summary>
+    public static async Task<T?> LoadAsync<T>(string filename)
+    {
+        using var fs = new FileStream(filename, FileMode.Open);
         using var sr = new StreamReader(fs);
         var json = await sr.ReadToEndAsync();
         sr.Close();
