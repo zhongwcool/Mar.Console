@@ -45,23 +45,7 @@ Load mail list from json file.
 ```c#
     private void Prepare()
     {
-        var task = Task.Run(() =>
-        {
-            var model = JsonUtil.Load<MailMode>(JSON_FILE);
-            return model?.Mails;
-        });
-
-        task.ContinueWith(_ =>
-        {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
-            {
-                if (task.Result == null) return;
-                foreach (var mail in task.Result)
-                {
-                    EmailList.Add(mail);
-                }
-            });
-        });
+        var model = JsonUtil.Load<Mail>(JSON_FILE);
     }
     
     private const string JSON_FILE = "mails.json";
@@ -69,4 +53,4 @@ Load mail list from json file.
 
 #### Save
 
-You can use this tool like `JsonUtil.Save<MyModel>(file, model);` or `JsonUtil.Save(file, json);`
+You can just call like `JsonUtil.Save<MyModel>(file, model);` or `JsonUtil.Save(file, json);`

@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System;
 using Mar.Cheese;
+using Sample;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -10,10 +12,27 @@ Log.Logger = new LoggerConfiguration()
 
 Console.WriteLine($"Hello, {Environment.UserName}!");
 
-var task = SystemUtil.GetSystemInfo();
-task.ContinueWith(_ =>
+var info = await SystemUtil.GetSystemInfo();
+info.PrintGreen();
+
+var tianqis = new[]
 {
-    if (task.Result is { } info) info.PrintGreen();
-});
+    new Tianqi
+    {
+        Id = "2024-04-01", High = 26, Low = 16, Condition = "多云~大雨", Wind = "东南风3级", Aqi = "69良",
+        Date = new DateTime(2024, 04, 01)
+    },
+    new Tianqi
+    {
+        Id = "2024-04-02", High = 21, Low = 15, Condition = "中雨", Wind = "南风3级", Aqi = "69良",
+        Date = new DateTime(2024, 04, 02)
+    },
+    new Tianqi
+    {
+        Id = "2024-04-03", High = 16, Low = 10, Condition = "雾~阴", Wind = "西北风3级", Aqi = "69良",
+        Date = new DateTime(2024, 04, 03)
+    }
+};
+JsonUtil.SaveAsync("1-tianqi.json", tianqis).Wait();
 
 Console.Read();

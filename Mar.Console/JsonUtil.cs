@@ -39,7 +39,7 @@ public static class JsonUtil
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="model">json in model</param>
-    public static void Save<T>(string filename, T model)
+    public static void Save(string filename, object? model)
     {
         var json = JsonConvert.SerializeObject(model);
         using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
@@ -55,7 +55,7 @@ public static class JsonUtil
     /// </summary>
     /// <param name="filename">target file</param>
     /// <param name="model">json in model</param>
-    public static async Task SaveAsync<T>(string filename, T model)
+    public static async Task SaveAsync(string filename, object? model)
     {
         var json = JsonConvert.SerializeObject(model);
         using var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);

@@ -7,18 +7,18 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
-        <PackageReleaseNotes>1. 恢复JsonUtil非异步方法</PackageReleaseNotes>
-        <PackageVersion>0.6.6</PackageVersion>
+        <PackageReleaseNotes>1. 修正JsonUtil存储到文件的方法</PackageReleaseNotes>
+        <PackageVersion>0.6.7</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>12</LangVersion>
         <RootNamespace>Mar.Cheese</RootNamespace>
         <Authors>Alex Zhong</Authors>
         <Company>Alex Zhong</Company>
-        <AssemblyVersion>0.6.6</AssemblyVersion>
-        <FileVersion>0.6.6</FileVersion>
+        <AssemblyVersion>0.6.7</AssemblyVersion>
+        <FileVersion>0.6.7</FileVersion>
         <PackageIcon>ico_nuget.png</PackageIcon>
-        <TargetFrameworks>netstandard2.1;net462;net472;net481</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1;net462;net472;net481;net6.0;net7.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
