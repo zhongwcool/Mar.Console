@@ -7,18 +7,18 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
-        <PackageReleaseNotes>1. 修正JsonUtil存储到文件的方法</PackageReleaseNotes>
-        <PackageVersion>0.6.7</PackageVersion>
+        <PackageReleaseNotes>1. 为JsonUtil增加检查-文件是否存在</PackageReleaseNotes>
+        <PackageVersion>0.6.8</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>12</LangVersion>
         <RootNamespace>Mar.Cheese</RootNamespace>
-        <Authors>Alex Zhong</Authors>
-        <Company>Alex Zhong</Company>
-        <AssemblyVersion>0.6.7</AssemblyVersion>
-        <FileVersion>0.6.7</FileVersion>
+        <Authors>Zhong Wei</Authors>
+        <Company>Zhong Wei</Company>
+        <AssemblyVersion>0.6.8</AssemblyVersion>
+        <FileVersion>0.6.8</FileVersion>
         <PackageIcon>ico_nuget.png</PackageIcon>
-        <TargetFrameworks>netstandard2.1;net462;net472;net481;net6.0;net7.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0;net8.0;net462;net472;net481</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,7 +27,7 @@
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Serilog" Version="3.1.1"/>
+        <PackageReference Include="Serilog" Version="4.0.0"/>
         <PackageReference Include="System.Management" Version="8.0.0"/>
     </ItemGroup>
 

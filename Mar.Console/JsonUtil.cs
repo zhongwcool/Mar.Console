@@ -64,6 +64,7 @@ public static class JsonUtil
         await sw.FlushAsync();
         sw.Close();
         fs.Close();
+        $"successfully save data to {filename}".PrintGreen();
     }
 
     /// <summary>
@@ -71,6 +72,7 @@ public static class JsonUtil
     /// </summary>
     public static T? Load<T>(string filename)
     {
+        if (!File.Exists(filename)) return default;
         using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         using var sr = new StreamReader(fs);
         var json = sr.ReadToEnd();
@@ -87,6 +89,7 @@ public static class JsonUtil
     /// </summary>
     public static async Task<T?> LoadAsync<T>(string filename)
     {
+        if (!File.Exists(filename)) return default;
         using var fs = new FileStream(filename, FileMode.Open);
         using var sr = new StreamReader(fs);
         var json = await sr.ReadToEndAsync();
