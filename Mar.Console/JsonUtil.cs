@@ -17,6 +17,7 @@ public static class JsonUtil
         sw.Flush();
         sw.Close();
         fs.Close();
+        $"successfully save data to {filename}".PrintGreen();
     }
 
     /// <summary>
@@ -32,6 +33,7 @@ public static class JsonUtil
         await sw.FlushAsync();
         sw.Close();
         fs.Close();
+        $"successfully save data to {filename}".PrintGreen();
     }
 
     /// <summary>
@@ -48,6 +50,7 @@ public static class JsonUtil
         sw.Flush();
         sw.Close();
         fs.Close();
+        $"successfully save data to {filename}".PrintGreen();
     }
 
     /// <summary>
