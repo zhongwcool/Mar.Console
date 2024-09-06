@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System;
+using System.Reflection;
 using Mar.Cheese;
 using Sample;
 using Serilog;
@@ -12,7 +13,8 @@ Log.Logger = new LoggerConfiguration()
 
 Console.WriteLine($"Hello, {Environment.UserName}!");
 
-var info = await SystemUtil.GetSystemInfo();
+var version = Assembly.GetExecutingAssembly().GetName().Version;
+var info = await SystemUtil.GetSystemInfo(version);
 info.PrintGreen();
 
 var tianqis = new[]

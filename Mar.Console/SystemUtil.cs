@@ -11,8 +11,9 @@ public class SystemUtil
     ///     Print system info
     /// </summary>
     /// <param name="options">Output options: UseConsole use console, UseSerilog use Serilog</param>
+    /// <param name="soft">soft version</param>
     /// <returns></returns>
-    public static async void PrintSystemInfo(OutOptions options = OutOptions.UseConsole)
+    public static async void PrintSystemInfo(OutOptions options = OutOptions.UseConsole, Version soft = null)
     {
         await Task.Run(() =>
         {
@@ -79,10 +80,15 @@ public class SystemUtil
                 else
                     Console.WriteLine("Memory: " + mem + "GB");
             }
+
+            if (options == OutOptions.UseSerilog)
+                Log.Fatal($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
+            else
+                Console.WriteLine($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
         });
     }
 
-    public static async Task<string> GetSystemInfo()
+    public static async Task<string> GetSystemInfo(Version? soft = null)
     {
         var stringBuilder = new StringBuilder();
 
@@ -132,6 +138,9 @@ public class SystemUtil
                 var mem = (double)capacityBytes / 1024 / 1024 / 1024;
                 stringBuilder.Append("Memory: " + mem + "GB").Append(Environment.NewLine);
             }
+
+            if (null != soft)
+                stringBuilder.Append($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
         });
 
         return stringBuilder.ToString();
