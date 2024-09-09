@@ -2,8 +2,6 @@
 
 [![latest version](https://img.shields.io/nuget/v/Mar.Console)](https://www.nuget.org/packages/Mar.Console) [![downloads](https://img.shields.io/nuget/dt/Mar.Console)](https://www.nuget.org/packages/Mar.Console)
 
-Modify namespace form Mar.Console to Mar.Cheese to avoid conflicts.
-
 ## ExceptionUtil
 
 Get text message from exception.

@@ -19,6 +19,7 @@
         <FileVersion>0.7.0</FileVersion>
         <PackageIcon>ico_nuget.png</PackageIcon>
         <TargetFrameworks>net6.0;net7.0;net8.0;net462;net472;net481</TargetFrameworks>
+        <PackageProjectUrl>https://www.nuget.org/packages/Mar.Console</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>
