@@ -23,40 +23,61 @@ public class EmailUtil
         int smtpPort, string username, string password, List<string>? attachments = null)
     {
         var result = false;
-        await Task.Run(() =>
+        try
         {
-            using var mail = new MailMessage(from, to, subject, body);
-            mail.CC.Add(from);
-
-            if (attachments != null)
+            await Task.Run(() =>
             {
-                foreach (var file in attachments)
+                using var mail = new MailMessage(from, to, subject, body);
+                mail.CC.Add(from);
+
+                var tempFiles = new List<string>();
+                try
                 {
-                    if (!File.Exists(file))
+                    if (attachments != null)
                     {
-                        Console.WriteLine($"附件不存在：{file}");
-                        continue;
+                        foreach (var file in attachments)
+                        {
+                            if (!File.Exists(file))
+                            {
+                                Console.WriteLine($"附件不存在：{file}");
+                                continue;
+                            }
+
+                            // 保持原始文件名，并创建临时路径
+                            var tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
+                            File.Copy(file, tempFilePath, true);
+                            tempFiles.Add(tempFilePath);
+                            var attachment = new Attachment(tempFilePath);
+                            mail.Attachments.Add(attachment);
+                        }
                     }
 
-                    var attachment = new Attachment(file);
-                    mail.Attachments.Add(attachment);
+                    using var smtpClient = new SmtpClient(smtpServer, smtpPort);
+                    smtpClient.Credentials = new NetworkCredential(username, password);
+
+                    smtpClient.Send(mail);
+                    result = true;
                 }
-            }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"发送邮件时出错：{ex.Message}");
+                    result = false;
+                }
+                finally
+                {
+                    // 清理临时文件
+                    foreach (var tempFile in tempFiles.Where(File.Exists))
+                    {
+                        File.Delete(tempFile);
+                    }
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"发送邮件时出错：{ex.Message}");
+        }
 
-            using var smtpClient = new SmtpClient(smtpServer, smtpPort);
-            smtpClient.Credentials = new NetworkCredential(username, password);
-
-            try
-            {
-                smtpClient.Send(mail);
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"发送邮件时出错：{ex.Message}");
-                result = false;
-            }
-        });
         return result;
     }
 }
