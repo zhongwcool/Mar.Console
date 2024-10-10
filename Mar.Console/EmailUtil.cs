@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Mail;
 
 namespace Mar.Cheese;
@@ -21,36 +22,41 @@ public class EmailUtil
         string smtpServer,
         int smtpPort, string username, string password, List<string>? attachments = null)
     {
-        using var mail = new MailMessage(from, to, subject, body);
-        mail.CC.Add(from);
-
-        if (attachments != null)
+        var result = false;
+        await Task.Run(() =>
         {
-            foreach (var file in attachments)
+            using var mail = new MailMessage(from, to, subject, body);
+            mail.CC.Add(from);
+
+            if (attachments != null)
             {
-                if (!File.Exists(file))
+                foreach (var file in attachments)
                 {
-                    Console.WriteLine($"附件不存在：{file}");
-                    continue;
+                    if (!File.Exists(file))
+                    {
+                        Console.WriteLine($"附件不存在：{file}");
+                        continue;
+                    }
+
+                    var attachment = new Attachment(file);
+                    mail.Attachments.Add(attachment);
                 }
-
-                var attachment = new Attachment(file);
-                mail.Attachments.Add(attachment);
             }
-        }
 
-        using var smtpClient = new SmtpClient(smtpServer, smtpPort);
-        smtpClient.Credentials = new NetworkCredential(username, password);
+            using var smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.Credentials = new NetworkCredential(username, password);
 
-        try
-        {
-            await smtpClient.SendMailAsync(mail);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"发送邮件时出错：{ex.Message}");
-            return false;
-        }
+            try
+            {
+                smtpClient.Send(mail);
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"发送邮件时出错：{ex.Message}");
+                result = false;
+            }
+        });
+        return result;
     }
 }
