@@ -7,16 +7,16 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
-        <PackageReleaseNotes>1. 增加运行环境信息打印</PackageReleaseNotes>
-        <PackageVersion>0.7.0</PackageVersion>
+        <PackageReleaseNotes>优化了代码实现</PackageReleaseNotes>
+        <PackageVersion>0.8.0-pre1</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>12</LangVersion>
         <RootNamespace>Mar.Cheese</RootNamespace>
         <Authors>Zhong Wei</Authors>
         <Company>Zhong</Company>
-        <AssemblyVersion>0.7.0</AssemblyVersion>
-        <FileVersion>0.7.0</FileVersion>
+        <AssemblyVersion>0.8.0</AssemblyVersion>
+        <FileVersion>0.8.0</FileVersion>
         <PackageIcon>ico_nuget.png</PackageIcon>
         <TargetFrameworks>net6.0;net7.0;net8.0;net462;net472;net481</TargetFrameworks>
         <PackageProjectUrl>https://www.nuget.org/packages/Mar.Console</PackageProjectUrl>

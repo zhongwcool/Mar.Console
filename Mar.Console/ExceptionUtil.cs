@@ -6,44 +6,28 @@ public class ExceptionUtil
 {
     public static async Task<string> TaskGetText(Exception? exception)
     {
-        var stringBuilder = new StringBuilder();
-
-        await Task.Run(() =>
-        {
-            while (true)
-            {
-                if (exception == null) break;
-
-                stringBuilder.Append(exception.GetType().Name + ": " + exception.Message + Environment.NewLine);
-                stringBuilder.Append("-------------------------------------------" + Environment.NewLine);
-                stringBuilder.Append("Stack Trace: " + Environment.NewLine);
-                stringBuilder.Append(exception.StackTrace);
-
-                exception = exception.InnerException;
-            }
-
-            return stringBuilder.ToString();
-        });
-
-        return stringBuilder.ToString();
+        return await Task.FromResult(GetExceptionText(exception));
     }
 
     public static string GetText(Exception? exception)
     {
-        var stringBuilder = new StringBuilder();
+        return GetExceptionText(exception);
+    }
 
-        while (true)
+    private static string GetExceptionText(Exception? exception)
+    {
+        var builder = new StringBuilder();
+
+        while (exception != null)
         {
-            if (exception == null) break;
-
-            stringBuilder.Append(exception.GetType().Name + ": " + exception.Message + Environment.NewLine);
-            stringBuilder.Append("-------------------------------------------" + Environment.NewLine);
-            stringBuilder.Append("Stack Trace: " + Environment.NewLine);
-            stringBuilder.Append(exception.StackTrace);
+            builder.AppendLine($"{exception.GetType().Name}: {exception.Message}");
+            builder.AppendLine("-------------------------------------------");
+            builder.AppendLine("Stack Trace:");
+            builder.AppendLine(exception.StackTrace);
 
             exception = exception.InnerException;
         }
 
-        return stringBuilder.ToString();
+        return builder.ToString();
     }
 }

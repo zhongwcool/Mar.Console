@@ -17,55 +17,40 @@ public class EmailUtil
     /// <param name="username">用户名</param>
     /// <param name="password">密码</param>
     /// <param name="attachments">附件列表</param>
-    public static async Task<bool> SendEmail(string from, string to, string subject, string body, string smtpServer,
-        int smtpPort, string username, string password, string[]? attachments = null)
+    public static async Task<bool> SendEmailAsync(string from, string to, string subject, string body,
+        string smtpServer,
+        int smtpPort, string username, string password, List<string>? attachments = null)
     {
-        await Task.Run(() =>
+        using var mail = new MailMessage(from, to, subject, body);
+        mail.CC.Add(from);
+
+        if (attachments != null)
         {
-            // 创建邮件消息对象
-            var mail = new MailMessage(from, to, subject, body);
-            mail.CC.Add(from);
-
-            // 添加附件
-            if (attachments != null)
-                foreach (var file in attachments)
+            foreach (var file in attachments)
+            {
+                if (!File.Exists(file))
                 {
-                    if (File.Exists(file) == false)
-                    {
-                        $"附件不存在：{file}".PrintYellow();
-                        continue;
-                    }
-
-                    var attachment = new Attachment(file);
-                    mail.Attachments.Add(attachment);
+                    Console.WriteLine($"附件不存在：{file}");
+                    continue;
                 }
 
-            // 创建 SMTP 客户端
-            var smtpClient = new SmtpClient(smtpServer, smtpPort);
-
-            // 如果需要身份验证，则设置用户名和密码
-            smtpClient.Credentials = new NetworkCredential(username, password);
-
-            try
-            {
-                // 发送邮件
-                smtpClient.Send(mail);
+                var attachment = new Attachment(file);
+                mail.Attachments.Add(attachment);
             }
-            catch (Exception ex)
-            {
-                $"{ex.Message}".PrintErr();
-                return false;
-            }
-            finally
-            {
-                // 清理资源
-                mail.Dispose();
-                smtpClient.Dispose();
-            }
+        }
 
+        using var smtpClient = new SmtpClient(smtpServer, smtpPort);
+        smtpClient.Credentials = new NetworkCredential(username, password);
+
+        try
+        {
+            await smtpClient.SendMailAsync(mail);
             return true;
-        });
-
-        return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"发送邮件时出错：{ex.Message}");
+            return false;
+        }
     }
 }
