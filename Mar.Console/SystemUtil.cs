@@ -13,137 +13,107 @@ public class SystemUtil
     /// <param name="options">Output options: UseConsole use console, UseSerilog use Serilog</param>
     /// <param name="soft">soft version</param>
     /// <returns></returns>
-    public static async void PrintSystemInfo(OutOptions options = OutOptions.UseConsole, Version soft = null)
+    public static async Task PrintSystemInfoAsync(OutOptions options = OutOptions.UseConsole, Version? soft = null)
     {
         await Task.Run(() =>
         {
-            var os = Environment.OSVersion;
-            var version = os.Version;
-            switch (version.Major)
-            {
-                case 10 when version.Build >= 19041:
-                    if (options == OutOptions.UseSerilog)
-                        Log.Fatal("Windows Version: Windows 10 {OsVersion}", version.Build);
-                    else
-                        Console.WriteLine($"Windows Version: Windows 10 {version.Build}");
-                    break;
-                case 10 when version.Build >= 22000:
-                    if (options == OutOptions.UseSerilog)
-                        Log.Fatal("Windows Version: Windows 11 {OsVersion}", version.Build);
-                    else
-                        Console.WriteLine($"Windows Version: Windows 11 {version.Build}");
-                    break;
-                default:
-                    if (options == OutOptions.UseSerilog)
-                        Log.Fatal("Windows Version: {OsVersion}", Environment.OSVersion);
-                    else
-                        Console.WriteLine($"Windows Version: {Environment.OSVersion}");
-                    break;
-            }
+            var version = Environment.OSVersion.Version;
 
-            if (options == OutOptions.UseSerilog)
-                Log.Fatal(".NET SDK Version: {Version}", Environment.Version);
-            else
-                Console.WriteLine($".NET SDK Version: {Environment.Version}");
+            LogOrPrint(options, GetWindowsVersion(version));
+            LogOrPrint(options, $".NET SDK Version: {Environment.Version}");
 
-            // Query CPU
-            var searcher = new ManagementObjectSearcher("select * from Win32_Processor");
-            foreach (var o in searcher.Get())
-            {
-                var share = (ManagementObject)o;
-                if (options == OutOptions.UseSerilog)
-                    Log.Fatal("CPU: {Unknown}", share["Name"]);
-                else
-                    Console.WriteLine($"CPU: {share["Name"]}");
-            }
+            foreach (var info in GetHardwareInfo("Win32_Processor", "CPU"))
+                LogOrPrint(options, info);
 
-            // Query Graphics Card
-            searcher = new ManagementObjectSearcher("select * from Win32_VideoController");
-            foreach (var o in searcher.Get())
-            {
-                var share = (ManagementObject)o;
-                if (options == OutOptions.UseSerilog)
-                    Log.Fatal("Graphics Card: {Unknown}", share["Name"]);
-                else
-                    Console.WriteLine("Graphics Card: " + share["Name"]);
-            }
+            foreach (var info in GetHardwareInfo("Win32_VideoController", "Graphics Card"))
+                LogOrPrint(options, info);
 
-            // Query Memory
-            searcher = new ManagementObjectSearcher("select * from Win32_PhysicalMemory");
-            foreach (var o in searcher.Get())
-            {
-                var share = (ManagementObject)o;
-                var capacityBytes = (ulong)share["Capacity"];
-                var mem = (double)capacityBytes / 1024 / 1024 / 1024;
-                if (options == OutOptions.UseSerilog)
-                    Log.Fatal("Memory: {Unknown} GB", mem);
-                else
-                    Console.WriteLine("Memory: " + mem + "GB");
-            }
+            foreach (var info in GetMemoryInfo())
+                LogOrPrint(options, info);
 
-            if (options == OutOptions.UseSerilog)
-                Log.Fatal($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
-            else
-                Console.WriteLine($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
+            if (soft != null)
+                LogOrPrint(options, $"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
         });
+    }
+
+    private static string GetWindowsVersion(Version version)
+    {
+        if (version.Major == 10)
+            switch (version.Build)
+            {
+                case >= 22000:
+                    return $"Windows Version: Windows 11 {version.Build}";
+                case >= 19041:
+                    return $"Windows Version: Windows 10 {version.Build}";
+            }
+
+        return $"Windows Version: {Environment.OSVersion}";
+    }
+
+    private static List<string> GetHardwareInfo(string query, string label)
+    {
+        var results = new List<string>();
+#pragma warning disable CA1416
+        var searcher = new ManagementObjectSearcher($"select * from {query}");
+        foreach (var o in searcher.Get())
+        {
+            var obj = (ManagementObject)o;
+            results.Add($"{label}: {obj["Name"]}");
+        }
+#pragma warning restore CA1416
+        return results;
+    }
+
+    private static List<string> GetMemoryInfo()
+    {
+        var results = new List<string>();
+#pragma warning disable CA1416
+        var searcher = new ManagementObjectSearcher("select * from Win32_PhysicalMemory");
+        foreach (var o in searcher.Get())
+        {
+            var obj = (ManagementObject)o;
+            var capacityBytes = (ulong)obj["Capacity"];
+            var mem = capacityBytes / 1024.0 / 1024 / 1024;
+            results.Add($"Memory: {mem} GB");
+        }
+#pragma warning restore CA1416
+        return results;
+    }
+
+    private static void LogOrPrint(OutOptions options, string message)
+    {
+        if (options == OutOptions.UseSerilog)
+            Log.Fatal(message);
+        else
+            Console.WriteLine(message);
     }
 
     public static async Task<string> GetSystemInfo(Version? soft = null)
     {
-        var stringBuilder = new StringBuilder();
+        var builder = new StringBuilder();
 
         await Task.Run(() =>
         {
-            var os = Environment.OSVersion;
-            var version = os.Version;
+            var version = Environment.OSVersion.Version;
 
-            stringBuilder.Append("-------------------------------------------").Append(Environment.NewLine);
-            switch (version.Major)
-            {
-                case 10 when version.Build >= 19041:
-                    stringBuilder.Append($"Windows Version: Windows 10 {version.Build}").Append(Environment.NewLine);
-                    break;
-                case 10 when version.Build >= 22000:
-                    stringBuilder.Append($"Windows Version: Windows 11 {version.Build}").Append(Environment.NewLine);
-                    break;
-                default:
-                    stringBuilder.Append($"Windows Version: {Environment.OSVersion}").Append(Environment.NewLine);
-                    break;
-            }
+            builder.AppendLine("-------------------------------------------");
+            builder.AppendLine(GetWindowsVersion(version));
+            builder.AppendLine($".NET SDK Version: {Environment.Version}");
 
-            stringBuilder.Append($".NET SDK Version: {Environment.Version}").Append(Environment.NewLine);
+            foreach (var info in GetHardwareInfo("Win32_Processor", "CPU"))
+                builder.AppendLine(info);
 
-            // Query CPU
-            var searcher = new ManagementObjectSearcher("select * from Win32_Processor");
-            foreach (var o in searcher.Get())
-            {
-                var share = (ManagementObject)o;
-                stringBuilder.Append($"CPU: {share["Name"]}").Append(Environment.NewLine);
-            }
+            foreach (var info in GetHardwareInfo("Win32_VideoController", "Graphics Card"))
+                builder.AppendLine(info);
 
-            // Query Graphics Card
-            searcher = new ManagementObjectSearcher("select * from Win32_VideoController");
-            foreach (var o in searcher.Get())
-            {
-                var share = (ManagementObject)o;
-                stringBuilder.Append("Graphics Card: " + share["Name"]).Append(Environment.NewLine);
-            }
+            foreach (var info in GetMemoryInfo())
+                builder.AppendLine(info);
 
-            // Query Memory
-            searcher = new ManagementObjectSearcher("select * from Win32_PhysicalMemory");
-            foreach (var o in searcher.Get())
-            {
-                var share = (ManagementObject)o;
-                var capacityBytes = (ulong)share["Capacity"];
-                var mem = (double)capacityBytes / 1024 / 1024 / 1024;
-                stringBuilder.Append("Memory: " + mem + "GB").Append(Environment.NewLine);
-            }
-
-            if (null != soft)
-                stringBuilder.Append($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
+            if (soft != null)
+                builder.AppendLine($"Soft Version: {soft.Major}.{soft.Minor}.{soft.Build}.{soft.Revision}");
         });
 
-        return stringBuilder.ToString();
+        return builder.ToString();
     }
 }
 
