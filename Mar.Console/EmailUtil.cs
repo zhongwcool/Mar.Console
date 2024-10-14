@@ -19,8 +19,7 @@ public class EmailUtil
     /// <param name="password">密码</param>
     /// <param name="attachments">附件列表</param>
     public static async Task<bool> SendEmailAsync(string from, string to, string subject, string body,
-        string smtpServer,
-        int smtpPort, string username, string password, List<string>? attachments = null)
+        string smtpServer, int smtpPort, string username, string password, List<string>? attachments = null)
     {
         var result = false;
         try
@@ -31,6 +30,8 @@ public class EmailUtil
                 mail.CC.Add(from);
 
                 var tempFiles = new List<string>();
+                var attachmentsToDispose = new List<Attachment>();
+
                 try
                 {
                     if (attachments != null)
@@ -43,18 +44,17 @@ public class EmailUtil
                                 continue;
                             }
 
-                            // 保持原始文件名，并创建临时路径
                             var tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
                             File.Copy(file, tempFilePath, true);
                             tempFiles.Add(tempFilePath);
                             var attachment = new Attachment(tempFilePath);
                             mail.Attachments.Add(attachment);
+                            attachmentsToDispose.Add(attachment);
                         }
                     }
 
                     using var smtpClient = new SmtpClient(smtpServer, smtpPort);
                     smtpClient.Credentials = new NetworkCredential(username, password);
-
                     smtpClient.Send(mail);
                     result = true;
                 }
@@ -65,7 +65,8 @@ public class EmailUtil
                 }
                 finally
                 {
-                    // 清理临时文件
+                    foreach (var attachment in attachmentsToDispose) attachment.Dispose();
+
                     foreach (var tempFile in tempFiles.Where(File.Exists))
                     {
                         File.Delete(tempFile);

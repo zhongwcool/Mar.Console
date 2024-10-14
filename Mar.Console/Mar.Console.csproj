@@ -7,8 +7,8 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
-        <PackageReleaseNotes>优化SystemUtil的代码</PackageReleaseNotes>
-        <PackageVersion>0.8.0-pre4</PackageVersion>
+        <PackageReleaseNotes>解决邮件发送的附件占用问题</PackageReleaseNotes>
+        <PackageVersion>0.8.0</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>12</LangVersion>
