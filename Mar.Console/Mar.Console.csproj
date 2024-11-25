@@ -7,16 +7,16 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
-        <PackageReleaseNotes>解决邮件发送的附件占用问题</PackageReleaseNotes>
-        <PackageVersion>0.8.0</PackageVersion>
+        <PackageReleaseNotes>启用SSL安全连接</PackageReleaseNotes>
+        <PackageVersion>0.8.1</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>12</LangVersion>
         <RootNamespace>Mar.Cheese</RootNamespace>
         <Authors>Zhong Wei</Authors>
         <Company>Zhong</Company>
-        <AssemblyVersion>0.8.0</AssemblyVersion>
-        <FileVersion>0.8.0</FileVersion>
+        <AssemblyVersion>0.8.1</AssemblyVersion>
+        <FileVersion>0.8.1</FileVersion>
         <PackageIcon>ico_nuget.png</PackageIcon>
         <TargetFrameworks>net6.0;net7.0;net8.0;net462;net472;net481</TargetFrameworks>
         <PackageProjectUrl>https://www.nuget.org/packages/Mar.Console</PackageProjectUrl>
@@ -28,8 +28,8 @@
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Serilog" Version="4.0.1"/>
-        <PackageReference Include="System.Management" Version="8.0.0"/>
+        <PackageReference Include="Serilog" Version="4.1.0"/>
+        <PackageReference Include="System.Management" Version="9.0.0"/>
     </ItemGroup>
 
     <ItemGroup>

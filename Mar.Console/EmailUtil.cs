@@ -17,9 +17,11 @@ public class EmailUtil
     /// <param name="smtpPort">SMTP 服务器端口</param>
     /// <param name="username">用户名</param>
     /// <param name="password">密码</param>
+    /// <param name="enableSSl"></param>
     /// <param name="attachments">附件列表</param>
     public static async Task<bool> SendEmailAsync(string from, string to, string subject, string body,
-        string smtpServer, int smtpPort, string username, string password, List<string>? attachments = null)
+        string smtpServer, int smtpPort, string username, string password, List<string>? attachments = null,
+        bool enableSSl = true)
     {
         var result = false;
         try
@@ -55,6 +57,7 @@ public class EmailUtil
 
                     using var smtpClient = new SmtpClient(smtpServer, smtpPort);
                     smtpClient.Credentials = new NetworkCredential(username, password);
+                    smtpClient.EnableSsl = enableSSl; // 启用SSL
                     smtpClient.Send(mail);
                     result = true;
                 }
