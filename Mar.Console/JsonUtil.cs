@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text;
+using Newtonsoft.Json;
 
 namespace Mar.Cheese;
 
@@ -11,9 +12,19 @@ public static class JsonUtil
     /// <param name="json">json data</param>
     public static void Save(string filename, string json)
     {
-        using var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-        using var sw = new StreamWriter(fs);
-        sw.WriteLine(json);
+        if (string.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+        if (json == null) throw new ArgumentNullException(nameof(json));
+
+        try
+        {
+            using var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+            using var sw = new StreamWriter(fs, Encoding.UTF8);
+            sw.WriteLine(json);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"保存JSON文件失败: {ex.Message}", ex);
+        }
     }
 
     /// <summary>
@@ -23,9 +34,19 @@ public static class JsonUtil
     /// <param name="json">json data</param>
     public static async Task SaveAsync(string filename, string json)
     {
-        using var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-        using var sw = new StreamWriter(fs);
-        await sw.WriteLineAsync(json);
+        if (string.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+        if (json == null) throw new ArgumentNullException(nameof(json));
+
+        try
+        {
+            using var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+            using var sw = new StreamWriter(fs, Encoding.UTF8);
+            await sw.WriteLineAsync(json);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"保存JSON文件失败: {ex.Message}", ex);
+        }
     }
 
     /// <summary>
@@ -59,13 +80,21 @@ public static class JsonUtil
     /// </summary>
     public static T? Load<T>(string filename)
     {
+        if (string.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
         if (!File.Exists(filename)) return default;
 
-        using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-        using var sr = new StreamReader(fs);
+        try
+        {
+            using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var sr = new StreamReader(fs, Encoding.UTF8);
 
-        var json = sr.ReadToEnd();
-        return string.IsNullOrEmpty(json) ? default : JsonConvert.DeserializeObject<T>(json);
+            var json = sr.ReadToEnd();
+            return string.IsNullOrEmpty(json) ? default : JsonConvert.DeserializeObject<T>(json);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"读取JSON文件失败: {ex.Message}", ex);
+        }
     }
 
     /// <summary>
@@ -73,12 +102,20 @@ public static class JsonUtil
     /// </summary>
     public static async Task<T?> LoadAsync<T>(string filename)
     {
+        if (string.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
         if (!File.Exists(filename)) return default;
 
-        using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-        using var sr = new StreamReader(fs);
+        try
+        {
+            using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var sr = new StreamReader(fs, Encoding.UTF8);
 
-        var json = await sr.ReadToEndAsync();
-        return string.IsNullOrEmpty(json) ? default : JsonConvert.DeserializeObject<T>(json);
+            var json = await sr.ReadToEndAsync();
+            return string.IsNullOrEmpty(json) ? default : JsonConvert.DeserializeObject<T>(json);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"读取JSON文件失败: {ex.Message}", ex);
+        }
     }
 }

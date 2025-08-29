@@ -7,19 +7,20 @@
         <Title>Console in March</Title>
         <Description>Some useful tools.</Description>
         <RepositoryUrl>https://github.com/zhongwcool/Mar.Console</RepositoryUrl>
-        <PackageReleaseNotes>启用SSL安全连接</PackageReleaseNotes>
-        <PackageVersion>0.8.1</PackageVersion>
+        <PackageReleaseNotes>1.优化邮件发送和控制台输出 \n2.增加异常处理和平台兼容性</PackageReleaseNotes>
+        <PackageVersion>0.9.0</PackageVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <LangVersion>12</LangVersion>
+        <LangVersion>13</LangVersion>
         <RootNamespace>Mar.Cheese</RootNamespace>
         <Authors>Zhong Wei</Authors>
         <Company>Zhong</Company>
         <AssemblyVersion>0.8.1</AssemblyVersion>
         <FileVersion>0.8.1</FileVersion>
         <PackageIcon>ico_nuget.png</PackageIcon>
-        <TargetFrameworks>net6.0;net7.0;net8.0;net462;net472;net481</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0;net8.0;net462;net472;net481;net9.0</TargetFrameworks>
         <PackageProjectUrl>https://www.nuget.org/packages/Mar.Console</PackageProjectUrl>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,8 +29,15 @@
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Serilog" Version="4.1.0"/>
-        <PackageReference Include="System.Management" Version="9.0.0"/>
+        <PackageReference Include="Serilog" Version="4.3.0"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net9.0'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net7.0'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net6.0'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net481'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net472'"/>
+        <PackageReference Include="System.Management" Version="9.0.8" Condition="'$(TargetFramework)' == 'net462'"/>
     </ItemGroup>
 
     <ItemGroup>

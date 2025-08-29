@@ -4,6 +4,8 @@ namespace Mar.Cheese;
 
 public static class ConsoleUtil
 {
+    private static readonly object _consoleLock = new();
+
     public static int PrintErr(this string format, params object[] args)
     {
         var s = string.Format(format, args);
@@ -28,8 +30,18 @@ public static class ConsoleUtil
 
     private static void PrintColor(this string s, ConsoleColor color)
     {
-        Console.ForegroundColor = color;
-        Console.WriteLine(s);
-        Console.ResetColor();
+        lock (_consoleLock)
+        {
+            var originalColor = Console.ForegroundColor;
+            try
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine(s);
+            }
+            finally
+            {
+                Console.ForegroundColor = originalColor;
+            }
+        }
     }
 }

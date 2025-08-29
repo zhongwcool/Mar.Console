@@ -23,63 +23,71 @@ public class EmailUtil
         string smtpServer, int smtpPort, string username, string password, List<string>? attachments = null,
         bool enableSSl = true)
     {
+        if (string.IsNullOrEmpty(from)) throw new ArgumentNullException(nameof(from));
+        if (string.IsNullOrEmpty(to)) throw new ArgumentNullException(nameof(to));
+        if (string.IsNullOrEmpty(smtpServer)) throw new ArgumentNullException(nameof(smtpServer));
+        if (string.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
+        if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
+
         var result = false;
+        MailMessage? mail = null;
+        SmtpClient? smtpClient = null;
+        var tempFiles = new List<string>();
+        var attachmentsToDispose = new List<Attachment>();
+
         try
         {
-            await Task.Run(() =>
+            mail = new MailMessage(from, to, subject, body);
+            mail.CC.Add(from);
+
+            if (attachments != null)
             {
-                using var mail = new MailMessage(from, to, subject, body);
-                mail.CC.Add(from);
-
-                var tempFiles = new List<string>();
-                var attachmentsToDispose = new List<Attachment>();
-
-                try
+                foreach (var file in attachments)
                 {
-                    if (attachments != null)
+                    if (!File.Exists(file))
                     {
-                        foreach (var file in attachments)
-                        {
-                            if (!File.Exists(file))
-                            {
-                                Console.WriteLine($"附件不存在：{file}");
-                                continue;
-                            }
-
-                            var tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
-                            File.Copy(file, tempFilePath, true);
-                            tempFiles.Add(tempFilePath);
-                            var attachment = new Attachment(tempFilePath);
-                            mail.Attachments.Add(attachment);
-                            attachmentsToDispose.Add(attachment);
-                        }
+                        Debug.WriteLine($"附件不存在：{file}");
+                        continue;
                     }
 
-                    using var smtpClient = new SmtpClient(smtpServer, smtpPort);
-                    smtpClient.Credentials = new NetworkCredential(username, password);
-                    smtpClient.EnableSsl = enableSSl; // 启用SSL
-                    smtpClient.Send(mail);
-                    result = true;
+                    var tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
+                    File.Copy(file, tempFilePath, true);
+                    tempFiles.Add(tempFilePath);
+                    var attachment = new Attachment(tempFilePath);
+                    mail.Attachments.Add(attachment);
+                    attachmentsToDispose.Add(attachment);
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"发送邮件时出错：{ex.Message}");
-                    result = false;
-                }
-                finally
-                {
-                    foreach (var attachment in attachmentsToDispose) attachment.Dispose();
+            }
 
-                    foreach (var tempFile in tempFiles.Where(File.Exists))
-                    {
-                        File.Delete(tempFile);
-                    }
-                }
-            });
+            smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.Credentials = new NetworkCredential(username, password);
+            smtpClient.EnableSsl = enableSSl;
+
+            await smtpClient.SendMailAsync(mail);
+            result = true;
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"发送邮件时出错：{ex.Message}");
+            result = false;
+        }
+        finally
+        {
+            // 清理资源
+            foreach (var attachment in attachmentsToDispose) attachment.Dispose();
+
+            foreach (var tempFile in tempFiles.Where(File.Exists))
+                try
+                {
+                    File.Delete(tempFile);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"删除临时文件失败：{ex.Message}");
+                }
+
+            mail?.Dispose();
+            smtpClient?.Dispose();
         }
 
         return result;
